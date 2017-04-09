@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+
 public class Application extends Entity {
 
     @NotNull
@@ -24,7 +25,9 @@ public class Application extends Entity {
     @NotNull
     private String conferenceCompetition;
 
-    private LocalDateTime creationTime;
+/*    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)*/
+    private LocalDateTime creationDate;
 
     public Application() {
 
@@ -70,12 +73,12 @@ public class Application extends Entity {
         this.conferenceCompetition = conferenceCompetition;
     }
 
-    public LocalDateTime getCreationTime() {
-        return creationTime;
+    public LocalDateTime getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreationTime(LocalDateTime creationTime) {
-        this.creationTime = creationTime;
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override
@@ -86,7 +89,7 @@ public class Application extends Entity {
                 ", participationForm='" + participationForm + '\'' +
                 ", speaker='" + speaker + '\'' +
                 ", conferenceCompetition='" + conferenceCompetition + '\'' +
-                ", creationTime=" + creationTime +
+                ", creationDate=" + creationDate +
                 '}';
     }
 }

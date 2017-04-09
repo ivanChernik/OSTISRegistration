@@ -6,6 +6,8 @@ import java.util.List;
 
 public class Participant extends Entity {
 
+    private String sysIndf;
+
     @NotNull
     @Size(max = 100)
     private String firstName;
@@ -38,6 +40,14 @@ public class Participant extends Entity {
 
     public Participant() {
 
+    }
+
+    public String getSysIndf() {
+        return sysIndf;
+    }
+
+    public void setSysIndf(String sysIndf) {
+        this.sysIndf = sysIndf;
     }
 
     public String getFirstName() {
@@ -116,7 +126,8 @@ public class Participant extends Entity {
     @Override
     public String toString() {
         return "Participant{" +
-                "firstName='" + firstName + '\'' +
+                "sysIndf='" + sysIndf + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", academicDegree='" + academicDegree + '\'' +
