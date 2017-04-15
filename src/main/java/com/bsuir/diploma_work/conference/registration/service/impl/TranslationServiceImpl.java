@@ -1,6 +1,7 @@
 package com.bsuir.diploma_work.conference.registration.service.impl;
 
 
+import com.bsuir.diploma_work.conference.registration.domain.Application;
 import com.bsuir.diploma_work.conference.registration.domain.Participant;
 import com.bsuir.diploma_work.conference.registration.service.TranslationService;
 import org.slf4j.Logger;
@@ -13,6 +14,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class TranslationServiceImpl implements TranslationService {
 
     private static final Logger logger = getLogger(TranslationServiceImpl.class);
+
+    private static final String REGEX_CHECKING_SPECIAL_ARTICLES = "[^A-Za-z0-9_]";
+    private static final String REGEX_CHECKING_SPACE = "\\s";
 
     private String alpha = new String("абвгдеёжзиыйклмнопрстуфхцчшщьэюя");
 
@@ -39,6 +43,16 @@ public class TranslationServiceImpl implements TranslationService {
         logger.debug("Result system identificator", sysIndf);
     }
 
+    @Override
+    public String createTranslitApplicationNameOfArticle(Application application) {
+        String nameOfArticle = application.getNameOfArticle();
+        nameOfArticle = tanslit(nameOfArticle);
+        nameOfArticle = nameOfArticle
+                .replaceAll(REGEX_CHECKING_SPACE, "_");
+        nameOfArticle = nameOfArticle
+                .replaceAll(REGEX_CHECKING_SPECIAL_ARTICLES, "");
+        return nameOfArticle;
+    }
 
     private String tanslit(String original) {
 
@@ -56,7 +70,7 @@ public class TranslationServiceImpl implements TranslationService {
             }
         }
 
-        logger.debug("Tanslated string", newStr);
+        logger.debug("Tanslated string: " + newStr);
         return newStr.toString();
     }
 }

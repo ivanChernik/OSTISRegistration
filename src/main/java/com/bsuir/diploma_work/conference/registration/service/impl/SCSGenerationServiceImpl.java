@@ -4,7 +4,7 @@ package com.bsuir.diploma_work.conference.registration.service.impl;
 import com.bsuir.diploma_work.conference.registration.domain.Application;
 import com.bsuir.diploma_work.conference.registration.domain.Participant;
 import com.bsuir.diploma_work.conference.registration.domain.WorkingPlace;
-import com.bsuir.diploma_work.conference.registration.exception.SCSWasNotCreatedException;
+import com.bsuir.diploma_work.conference.registration.exception.service.SCSWasNotCreatedException;
 import com.bsuir.diploma_work.conference.registration.service.SCSGenerationService;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.CharEncoding;
@@ -29,7 +29,7 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
     private static final Logger logger = getLogger(SCSGenerationServiceImpl.class);
 
     private static final String UTF_8 = "utf-8";
-    private static final String MM_DD_YYYY = "MM_dd_yyyy";
+    private static final String DD_MM_YYYY = "dd_MM_yyyy";
     private static final String SCS = ".scs";
 
     private static final String APPLICATION_TEMPLATE_FILE = "templates/ostis_application.vm";
@@ -43,23 +43,25 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
     private String destinationPathParticipantSCS;
 
     @Value("${conference.year}")
-    private String conferenceYear;
+    private int conferenceYear;
 
     @Autowired
     private VelocityEngine velocityEngine;
 
     @Override
-    public void generateApplication(Participant participant) {
+    public void generateApplication(Participant participant, String tanslitedNameOfArticle) {
 
         String fileBody = generateFileBody(APPLICATION_TEMPLATE_FILE,
-                generateApplicationModel(participant));
+                generateApplicationModel(participant, tanslitedNameOfArticle));
 
-        createFile(fileBody, generateFileNameApplication(participant.getSysIndf()));
+        createFile(fileBody, generateFileNameApplication(participant, tanslitedNameOfArticle));
     }
 
 
-    private Map<String, Object> generateApplicationModel(Participant participant) {
+    private Map<String, Object> generateApplicationModel(Participant participant, String tanslitedNameOfArticle) {
         Map<String, Object> model = new HashedMap();
+
+        model.put("tanslited_name_of_article", tanslitedNameOfArticle);
 
         model.put("conference_year", conferenceYear);
         model.put("creation_date", getFormattedTodayDate());
@@ -78,7 +80,7 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
         model.put("organization", workingPlace.getOrganization());
         model.put("position", workingPlace.getPosition());
 
-        Application application = participant.getApplicationList().iterator().next();
+        Application application = participant.getApplicationList().get(0);
 
         model.put("date", application.getCreationDate());
         model.put("speaker", application.getSpeaker());
@@ -90,13 +92,17 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
         return model;
     }
 
-    private String generateFileNameApplication(String sysIndf) {
-        return destinationPathApplicationSCS + "application_to_OSTIS_" +
+    private String generateFileNameApplication(Participant participant, String tanslitedNameOfArticle) {
+        String sysIndf = participant.getSysIndf();
+
+        return destinationPathApplicationSCS +
+                "application_to_OSTIS_" + conferenceYear + "_"
+                + tanslitedNameOfArticle + "_" +
                 sysIndf + "_" + getFormattedTodayDate() + ".scs";
     }
 
     private String getFormattedTodayDate() {
-        DateFormat df = new SimpleDateFormat(MM_DD_YYYY);
+        DateFormat df = new SimpleDateFormat(DD_MM_YYYY);
         return df.format(Calendar.getInstance().getTime());
     }
 
@@ -142,7 +148,7 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
 
     private void createFile(String fileBody, String destinationFile) {
 
-        logger.debug("File to create :", destinationFile);
+        logger.debug("File to create :" + destinationFile);
 
         Writer writer = null;
         try {
