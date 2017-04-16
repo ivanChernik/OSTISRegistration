@@ -28,7 +28,7 @@ public class TranslationServiceImpl implements TranslationService {
     @Override
     public void createTranslitSysIndf(Participant participant) {
         String lastName = tanslit(participant.getLastName());
-        String fistNameFirstChar = tanslit(participant.getLastName().substring(0, 1));
+        String fistNameFirstChar = tanslit(participant.getFirstName().substring(0, 1));
 
         String middleName = participant.getMiddleName();
         String middleNameFirstChar = "";
