@@ -6,5 +6,5 @@ ${sys_idnf} => nrel_main_idtf:
 
 ${sys_idnf} => nrel_email: [${email}](*<-lang_en;;*);;
 
-${sys_idnf} => nrel_information: [Ученая степень: ${academic_degree}, ученое звание: ${academic_title}.
+${sys_idnf} => nrel_author_information: [Ученая степень: ${academic_degree}, ученое звание: ${academic_title}.
 Информация о работе: ${organization}, ${position}, ${city},${country}.](*<-lang_en;;*);;
