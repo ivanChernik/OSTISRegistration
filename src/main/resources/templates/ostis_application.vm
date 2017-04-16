@@ -1,17 +1,13 @@
 application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date} => nrel_main_idtf:
 [Заявка на участие в международной научно-технической конференции
-OSTIS-${conference_year}]
+OSTIS-${conference_year}: ${name_of_article}]
 (*
 <- lang_ru;;
-*);
-[Application for participating in the 6th International Scientific and Technical Conference OSTIS-${conference_year}]
-(*
-<- lang_en;;
 *);;
 
 application_to_OSTIS -> application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date};;
 
-application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date} => nrel_author:
+application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date} => nrel_authors:
                                                         ${sys_indf_of_participant};;
 
 

@@ -10,6 +10,7 @@ import com.bsuir.diploma_work.conference.registration.service.TranslationService
 import com.bsuir.diploma_work.conference.registration.util.ApplyExternalProperty;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +38,7 @@ public class ConfApplicationResourse {
     @Autowired
     private ApplyExternalProperty applyExternalProperty;
 
+    @CrossOrigin()
     @RequestMapping(value = "/generate", method = POST, consumes = "application/json")
     public String generateApplication(@Valid @RequestBody Participant participant) {
 
