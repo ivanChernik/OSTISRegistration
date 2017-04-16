@@ -72,12 +72,14 @@ public class ParticipantServiceImpl implements ParticipantService {
     @Override
     @Transactional
     public void saveParticipantAndApplication(Participant participant) {
+        logger.warn("Service: save participant and application:{}", participant);
         participantDao.saveParticipantAndApplication(participant);
     }
 
     @Override
     @Transactional
     public void saveApplication(Application application) {
+        logger.warn("Service: application:{}", application);
         participantDao.saveApplication(application);
     }
 }

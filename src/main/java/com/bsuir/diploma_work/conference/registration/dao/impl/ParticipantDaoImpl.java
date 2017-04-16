@@ -87,7 +87,7 @@ public class ParticipantDaoImpl implements ParticipantDao {
     @Override
     public void saveApplication(Application application) {
         application.setCreationDate(getNow());
-        sessionFactory.getCurrentSession().save(application);
+        sessionFactory.getCurrentSession().saveOrUpdate(application);
 
         logger.debug("Application was saved: {}", application);
     }
