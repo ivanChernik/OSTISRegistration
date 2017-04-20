@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    {% block extrameta %}{% end %}
+    <title>{% block title %}OSTIS{% end %}</title>
+
+
+    
+    <link rel="stylesheet" type="text/css" href="/static/common/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/common/bootstrap/css/bootstrap-multilevel.css" />
+    <link rel="stylesheet" type="text/css" href="/static/components/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/static/components/css/overlay.css" />
+
+    {% block extrastyles %}{% end %}
+
+    {% include 'common.html' %}
+    {% block extrapluginscripts %}{% end %}
+
+    {% include 'components.html' %}
+    {% block extrascripts %}{% end %}
+
+    {% block head %}{% end %}
+
+    <script src="https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/1.7.13/jquery.popupoverlay.js"></script>
+    <script src="/static/components/js/generateApplication.js"></script>
+    <script src="/static/components/js/jquery.cookie.js"></script>
+</head>
+
+{% block body %}
+<body id="body">
+
+
+
+    <nav class="navbar navbar-default" style="
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    right: 0;
+    top: 0;
+    ">
+    <div class="container-fluid" style="
+    padding-left: 0px;
+    ">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+    {#<a class="navbar-brand" href="#">OSTIS</a>#}
+    <!-- Help button -->
+    <div id="help_button" class="help-button" style="
+    padding-right: 20px;
+    padding-left: 20px;
+    ">
+    <a data-toggle="modal" data-target="#help-modal"><img src="/static/components/images/help-red.png" class="help-button"/></a>
+</div>
+</div>
+
+<!-- Collect the nav links, forms, and other content for toggling -->
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div id="menu_container">
+        <!-- there will be placed menu items -->
+    </div>
+     <ul class="nav navbar-nav">
+            <li>
+                <a  id="generate-application" href="#popup1">Подать заявку</a>
+            </li>
+    </ul>
+
+    <div id="auth-user-panel" class="pull-right">
+        {% if user %}
+        <div id="auth-user-registered">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <div class="auth-user-image pull-left" ><img src="{{ user.avatar }}" alt="{{ escape(user.name) }}"></img></div>
+                        <div class="pull-left"><span id="auth-user-name" >{{ escape(user.name) }}</span></div>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {# <li class="divider"></li> #}
+                        <li><a href="/auth/logout">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        {% else %}
+        <a href="/auth/google">
+            <div class="gplus-login-button"></div>
+        </a>
+        {% end %}
+    </div>
+
+    <div id="language-panel">
+        <form class="navbar-form navbar-right" sc_control_sys_idtf="ui_control_select_idtf_mode">
+            <select id="language-select" class="form-control" style="width: 150px;">
+            </select>
+        </form>
+
+    </div>
+</div><!-- /.navbar-collapse -->
+</div><!-- /.container-fluid -->
+</nav>
+
+<!-- header -->
+    <!--<div class="page-header">
+        <h1>IMS<small>OSTIS</small></h1>
+    </div>-->
+    <!-- main content -->
+    <div id="main-container" class="main-container row">
+        <div id="static-window-container" class="col-xs-2 col-sm-2 col-md-2">
+            <div id="history-container" class="panel panel-default">
+                <div>
+                    <ul id="history-items" class="list-group">{# Tabs will be added later #}</ul>
+                </div>
+            </div>
+        </div>
+        <div id="window-header-tools" class="pull-right" style="padding-right: 35px;">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success ">
+                    <span class="glyphicon glyphicon-font"></span>
+                </button>
+                <button type="button" class="histoy-item-btn btn btn-success" data-toggle="dropdown" sc_control_sys_idtf="ui_control_select_window_type">
+                    <span class="glyphicon glyphicon-list-alt"></span>
+                </button>
+                <ul id="history-item-langs" class="dropdown-menu" role="menu">{# languages will be added #}</ul>
+                
+                <button type="button" class="btn btn-primary" id="windows-list">
+                    <span class="glyphicon glyphicon-th-large"></span>
+                </button>
+                <button type="button" class="btn btn-default" id="history-item-print" sc_control_sys_idtf="ui_control_print_window_content">
+                    <span class="glyphicon glyphicon-print"></span>
+                </button>
+                <button type="button" class="btn btn-default" id="history-item-link" data-container="body" data-toggle="popover" data-placement="bottom">
+                    <span class="glyphicon glyphicon-link"></span>
+                </button>
+            </div>
+            
+            <div id="search-panel">
+                <form role="search">
+                    <div class="form-group">
+                        <input id="search-input" type="text" class="typeahead form-control" x-webkit-speech sc_control_sys_idtf="ui_control_search_idtf_edit" style="width: 250px;" data-provide="typeahead" autocomplete="off">
+                    </div>
+                    {# <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></button> #}
+                </form>
+            </div>
+        </div>
+        <div id="window-container" class="col-xs-10 col-sm-10 col-md-10">{# Windows will be added later #}</div>
+    </div>
+
+    <div id="footer" class="navbar navbar-default navbar-fixed-bottom">
+        <div class="navbar-inner">
+            <div id="arguments_container" class="argument-container">
+                <div class="btn-group">
+                    <button id="arguments_clear_button" class="btn btn-danger" sc_control_sys_idtf="ui_control_argument_button_clear"><span class="glyphicon glyphicon-remove-sign"></span></button>
+                    <!--<button id="arguments_add_button" class="btn btn-success" {#sc_control_sys_idtf="ui_control_argument_button_add"#}><span class="glyphicon glyphicon-plus-sign"></span></button>-->
+                </div>
+                
+                <div id="arguments_buttons" class="btn-group argument-buttons">
+                    <!-- Buttons will be inserted on arguments append -->
+                </div>
+            </div>
+            <span class="copyright">Copyright © 2012 - 2017 <a href="#">OSTIS</a> </span>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div id="help-modal" class="modal fade bs-modal-lg" tabindex="-1" role="dialog" aria-labelledby="Help" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div id="help-modal-body" class="modal-content modal-empty">
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            SCWeb.ui.Locker.show();
+            var params = {
+                menu_container_id: 'menu_container',
+                {% if first_time == "1" %}first_time: true,{% end %}
+            };
+            $.when(SCWeb.core.Main.init(params)).done(function() {
+                SCWeb.ui.Locker.hide();
+            });
+        });
+
+        
+    </script>
+
+
+    <div id="sc-ui-locker">
+        <div id="sc-ui-locker-text">Loading...</div>
+        <div id="sc-ui-locker-icon"></div>   
+    </div>
+ </div>
+
+ <div id="popup1" class="overlay">
+   <div class="popup">
+      <p>Заявка на участие в международной научно-технической конференции OSTIS</p>
+      <a class="close" href="#">&times;</a>
+      <div class="content">
+         <div id="application-overlay"  class="container">
+            <div class="row">
+               <form role="form" action="" onsubmit="return false;">
+                  <div class="thumbnail col-xs-3">
+                     <div class="col-sm-6">
+                        <div class="form-group"> 
+                            <label for="name-of-article"><span class="required-field">*</span>Название статьи:</label> 
+                            <input  id="name-of-article" type="text" class="form-control" size="20" placeholder="Название статьи"required> 
+                            </div>
+                        <div class="form-group"> 
+                            <label for="article-authors"><span class="required-field">*</span>Соавторы статьи:</label> 
+                                <input  id="article-authors" type="text" class="form-control" placeholder="Соавторы статьи" required> 
+                        </div>
+                        <div class="form-group">
+                           <label for="form-of-participation"><span class="required-field">*</span>Форма участия:</label> 
+                           <select id="form-of-participation" class="selectpicker">
+                              <option>доклад</option>
+                              <option>публикация</option>
+                           </select>
+                        </div>
+                        <div class="form-group"> 
+                             <label for="speaker">Докладчик:</label> 
+                            <input id="speaker" type="text" class="form-control" placeholder="Докладчик" required>
+                         </div>
+                        <div class="form-group">
+                           <label for="conference-competition">Участие в конкурсах конференции:</label> 
+                           <select id="conference-competition" class="selectpicker">
+                              <option>конкурс научных докладов молодых учёных</option>
+                              <option>конкурс программных продуктов молодых учёных</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="thumbnail col-xs-3">
+                     <p>Информация об авторах статьи</p>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                             <label for="surname"><span class="required-field">*</span>Фамилия:</label> 
+                             <input id="surname" type="text" class="form-control" placeholder="Фамилия"  required>
+                        </div>
+                        <div class="form-group"> 
+                            <label for="name"><span class="required-field">*</span>Имя:</label>
+                            <input id="name" type="text" class="form-control" placeholder="Имя" required> 
+                        </div>
+                        <div class="form-group"> 
+                            <label for="middle-name"><span class="required-field">*</span>Отчество:</label>
+                            <input id="middle-name" type="text" class="form-control" placeholder="Отчество"> 
+                        </div>
+                        <div class="form-group">
+                           <label for="academic-degree"><span class="required-field">*</span>Учёная степень:</label> 
+                           <select id="academic-degree" class="selectpicker" >
+                              <option>не имею</option>
+                              <option>кандидат наук</option>
+                              <option>доктор наук</option>
+                           </select>
+                        </div>
+                        <div class="form-group">
+                           <label for="academic-title"><span class="required-field">*</span>Учёное звание:</label> 
+                           <select id="academic-title" class="selectpicker">
+                              <option>не имею</option>
+                              <option>старший научный сотрудник</option>
+                              <option>доцент</option>
+                              <option>профессор</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="thumbnail col-xs-3">
+                     <div class="col-sm-6">
+                         <div class="form-group"> 
+                            <label for="email"><span class="required-field">*</span>Email:</label> 
+                            <input id="email" type="email" class="form-control" placeholder="Email" required> 
+                        </div>
+                        <div class="form-group"> 
+                            <label for="country"><span class="required-field">*</span>Страна:</label> 
+                            <input id="country" type="text" class="form-control" placeholder="Страна" required>
+                        </div>
+                        <div class="form-group"> 
+                            <label for="city"><span class="required-field">*</span>Город:</label>
+                            <input id="city" type="text" class="form-control" placeholder="Город" id="city" name="city" required> 
+                        </div>
+                        <div class="form-group"> 
+                            <label for="organization"><span class="required-field">*</span>Место работы (организация):</label> 
+                            <input id="organization" type="text" class="form-control" placeholder="Организация" required> 
+                        </div>
+                        <div class="form-group"> 
+                            <label for="position"><span class="required-field">*</span>Место работы (должность):</label> 
+                            <input id="position" type="text" class="form-control" placeholder="Должность" required> 
+                        </div>
+                     </div>
+                     <button id="send-application" type="submit" class="btn btn-success">Отправить заявку</button>
+                  </div>
+            </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+</div>
+
+
+</body>
+{% end %}
+
+</html>
