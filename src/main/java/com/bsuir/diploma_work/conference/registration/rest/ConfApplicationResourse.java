@@ -3,6 +3,7 @@ package com.bsuir.diploma_work.conference.registration.rest;
 
 import com.bsuir.diploma_work.conference.registration.domain.Application;
 import com.bsuir.diploma_work.conference.registration.domain.Participant;
+import com.bsuir.diploma_work.conference.registration.domain.tanslit.TranslitedParticipant;
 import com.bsuir.diploma_work.conference.registration.exception.service.ApplicationAlreadyExistsException;
 import com.bsuir.diploma_work.conference.registration.service.ParticipantService;
 import com.bsuir.diploma_work.conference.registration.service.SCSGenerationService;
@@ -73,9 +74,9 @@ public class ConfApplicationResourse {
             participantService.saveApplication(application);
         }
 
-        String tanslitedNameOfArticle = translationService
-                .createTranslitApplicationNameOfArticle(application);
-        scsGenerationService.generateApplication(checkedParticipant, tanslitedNameOfArticle);
+        TranslitedParticipant translitedParticipant = translationService
+                .createTranslitedParticipant(participant);
+        scsGenerationService.generateApplication(checkedParticipant, translitedParticipant);
     }
 
     private Application getApplication(Participant participant) {

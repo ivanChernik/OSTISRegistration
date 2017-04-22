@@ -1,5 +1,5 @@
 ${sys_idnf} => nrel_main_idtf:
-[${surname} ${name} ${middlename}]
+[${surname} ${name}#if(${middlename}) ${middlename}#end]
 (*
 <- lang_ru;;
 *);;

@@ -1,48 +1,47 @@
-application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_main_idtf:
+application_${translited_lastname_of_participant}_${translited_name_of_article} => nrel_main_idtf:
 [Заявка на участие в международной научно-технической конференции
 OSTIS-${conference_year}: ${name_of_article}]
 (*
 <- lang_ru;;
 *);;
 
-application_to_OSTIS_${conference_year} -> application_${tanslited_name_of_article}_${sys_indf_of_participant};;
+application_to_OSTIS_${conference_year} -> application_${translited_lastname_of_participant}_${translited_name_of_article};;
 
-application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_authors:
-                                                        ${sys_indf_of_participant};;
+application_${translited_lastname_of_participant}_${translited_name_of_article} => nrel_authors:  ${sys_indf_of_participant};;
 
 
-application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_name_of_article:
+application_${translited_lastname_of_participant}_${translited_name_of_article} => nrel_name_of_article:
 [${name_of_article}]
 (*
 <- lang_ru;;
 *);;
 
-application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_joint_authors:
+application_${translited_lastname_of_participant}_${translited_name_of_article} => nrel_joint_authors:
 [${joint_authors}]
 (*
 <- lang_ru;;
 *);;
 
-application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_participation_form:
+application_${translited_lastname_of_participant}_${translited_name_of_article} => nrel_participation_form:
 [${participation_form}]
 (*
 <- lang_ru;;
 *);;
 
 
-application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_conference_competition:
+application_${translited_lastname_of_participant}_${translited_name_of_article} => nrel_conference_competition:
 [${conference_competition}]
 (*
 <- lang_ru;;
 *);;
 
 
-application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_speaker:
+application_${translited_lastname_of_participant}_${translited_name_of_article} => nrel_speaker:
 [${speaker}]
 (*
 <- lang_ru;;
 *);;
 
 
-application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_application_date:
+application_${translited_lastname_of_participant}_${translited_name_of_article} => nrel_application_date:
 [${creation_date}];;

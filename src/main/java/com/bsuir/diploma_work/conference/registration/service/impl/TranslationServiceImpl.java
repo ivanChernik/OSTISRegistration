@@ -3,6 +3,8 @@ package com.bsuir.diploma_work.conference.registration.service.impl;
 
 import com.bsuir.diploma_work.conference.registration.domain.Application;
 import com.bsuir.diploma_work.conference.registration.domain.Participant;
+import com.bsuir.diploma_work.conference.registration.domain.tanslit.TranslitedApplication;
+import com.bsuir.diploma_work.conference.registration.domain.tanslit.TranslitedParticipant;
 import com.bsuir.diploma_work.conference.registration.service.TranslationService;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -32,11 +34,15 @@ public class TranslationServiceImpl implements TranslationService {
 
         String middleName = participant.getMiddleName();
         String middleNameFirstChar = "";
+
+        String sysIndf = "";
+
         if (middleName != null && !middleName.isEmpty()) {
             middleNameFirstChar = tanslit(middleName.substring(0, 1));
+            sysIndf = lastName + "_" + fistNameFirstChar + "_" + middleNameFirstChar;
+        } else {
+            sysIndf = lastName + "_" + fistNameFirstChar;
         }
-
-        String sysIndf = lastName + "_" + fistNameFirstChar + "_" + middleNameFirstChar;
 
         participant.setSysIndf(sysIndf);
 
@@ -44,18 +50,37 @@ public class TranslationServiceImpl implements TranslationService {
     }
 
     @Override
-    public String createTranslitApplicationNameOfArticle(Application application) {
-        String nameOfArticle = application.getNameOfArticle();
+    public TranslitedParticipant createTranslitedParticipant(Participant participant) {
 
-        nameOfArticle = nameOfArticle.trim()
+        Application application = participant.getApplicationList().get(0);
+
+        TranslitedParticipant translitedParticipant = new TranslitedParticipant();
+
+        translitedParticipant.setTanslitedApplication(translitApplication(application));
+        translitedParticipant.setLastName(tanslit(participant.getLastName()));
+
+        return translitedParticipant;
+    }
+
+    private TranslitedApplication translitApplication(Application application) {
+        TranslitedApplication translitedApplication = new TranslitedApplication();
+        String translitedNameOfArticle =
+                translitNameOfArticle(application.getNameOfArticle());
+
+        translitedApplication.setNameOfArticle(translitedNameOfArticle);
+
+        return translitedApplication;
+    }
+
+    private String translitNameOfArticle(String nameOfArticle) {
+        String translitedNameOfArticle = nameOfArticle.trim()
                 .replaceAll(REGEX_CHECKING_SPACE, "_");
-        nameOfArticle = tanslit(nameOfArticle);
-        nameOfArticle = nameOfArticle
+        translitedNameOfArticle = tanslit(translitedNameOfArticle);
+        translitedNameOfArticle = translitedNameOfArticle
                 .replaceAll(REGEX_CHECKING_SPECIAL_ARTICLES, "");
 
-        nameOfArticle = retrieveFirstChar(nameOfArticle);
-
-        return nameOfArticle;
+        translitedNameOfArticle = retrieveFirstChar(translitedNameOfArticle);
+        return translitedNameOfArticle;
     }
 
     private String tanslit(String original) {

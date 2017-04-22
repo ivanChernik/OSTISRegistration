@@ -4,6 +4,7 @@ package com.bsuir.diploma_work.conference.registration.service.impl;
 import com.bsuir.diploma_work.conference.registration.domain.Application;
 import com.bsuir.diploma_work.conference.registration.domain.Participant;
 import com.bsuir.diploma_work.conference.registration.domain.WorkingPlace;
+import com.bsuir.diploma_work.conference.registration.domain.tanslit.TranslitedParticipant;
 import com.bsuir.diploma_work.conference.registration.exception.service.SCSWasNotCreatedException;
 import com.bsuir.diploma_work.conference.registration.service.SCSGenerationService;
 import org.apache.commons.collections.map.HashedMap;
@@ -49,23 +50,25 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
     private VelocityEngine velocityEngine;
 
     @Override
-    public void generateApplication(Participant participant, String tanslitedNameOfArticle) {
+    public void generateApplication(Participant participant, TranslitedParticipant translitedParticipant) {
 
         String fileBody = generateFileBody(APPLICATION_TEMPLATE_FILE,
-                generateApplicationModel(participant, tanslitedNameOfArticle));
+                generateApplicationModel(participant, translitedParticipant));
 
-        createFile(fileBody, generateFileNameApplication(participant, tanslitedNameOfArticle));
+        createFile(fileBody, generateFileNameApplication(translitedParticipant));
     }
 
 
-    private Map<String, Object> generateApplicationModel(Participant participant, String tanslitedNameOfArticle) {
+    private Map<String, Object> generateApplicationModel(Participant participant, TranslitedParticipant translitedParticipant) {
         Map<String, Object> model = new HashedMap();
 
-        model.put("tanslited_name_of_article", tanslitedNameOfArticle);
+        model.put("translited_name_of_article",
+                translitedParticipant.getTanslitedApplication().getNameOfArticle());
 
         model.put("conference_year", conferenceYear);
         model.put("creation_date", getFormattedTodayDate());
         model.put("sys_indf_of_participant", participant.getSysIndf());
+        model.put("translited_lastname_of_participant", translitedParticipant.getLastName());
 
         Application application = participant.getApplicationList().get(0);
 
@@ -78,12 +81,12 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
         return model;
     }
 
-    private String generateFileNameApplication(Participant participant, String tanslitedNameOfArticle) {
-        String sysIndf = participant.getSysIndf();
+    private String generateFileNameApplication(TranslitedParticipant translitedParticipant) {
+        String nameOfArticle = translitedParticipant.getTanslitedApplication().getNameOfArticle();
 
         return destinationPathApplicationSCS +
-                "application" + "_" + tanslitedNameOfArticle + "_" +
-                sysIndf + SCS;
+                "application" + "_" + translitedParticipant.getLastName() + "_" +
+                nameOfArticle + SCS;
     }
 
     private String getFormattedTodayDate() {
