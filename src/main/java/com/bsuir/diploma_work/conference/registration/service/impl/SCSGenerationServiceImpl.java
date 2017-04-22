@@ -66,23 +66,9 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
         model.put("conference_year", conferenceYear);
         model.put("creation_date", getFormattedTodayDate());
         model.put("sys_indf_of_participant", participant.getSysIndf());
-        model.put("name", participant.getFirstName());
-        model.put("surname", participant.getLastName());
-        model.put("middlename", participant.getMiddleName());
-        model.put("email", participant.getEmail());
-        model.put("academic_degree", participant.getAcademicDegree());
-        model.put("academic_title", participant.getAcademicTitle());
-
-        WorkingPlace workingPlace = participant.getWorkingPlace();
-
-        model.put("city", workingPlace.getCity());
-        model.put("country", workingPlace.getCountry());
-        model.put("organization", workingPlace.getOrganization());
-        model.put("position", workingPlace.getPosition());
 
         Application application = participant.getApplicationList().get(0);
 
-        model.put("date", application.getCreationDate());
         model.put("speaker", application.getSpeaker());
         model.put("conference_competition", application.getConferenceCompetition());
         model.put("participation_form", application.getParticipationForm());
@@ -96,9 +82,8 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
         String sysIndf = participant.getSysIndf();
 
         return destinationPathApplicationSCS +
-                "application_to_OSTIS_" + conferenceYear + "_"
-                + tanslitedNameOfArticle + "_" +
-                sysIndf + "_" + getFormattedTodayDate() + ".scs";
+                "application" + "_" + tanslitedNameOfArticle + "_" +
+                sysIndf + SCS;
     }
 
     private String getFormattedTodayDate() {

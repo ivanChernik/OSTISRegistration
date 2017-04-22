@@ -1,52 +1,48 @@
-application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date} => nrel_main_idtf:
+application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_main_idtf:
 [Заявка на участие в международной научно-технической конференции
 OSTIS-${conference_year}: ${name_of_article}]
 (*
 <- lang_ru;;
 *);;
 
-application_to_OSTIS -> application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date};;
+application_to_OSTIS_${conference_year} -> application_${tanslited_name_of_article}_${sys_indf_of_participant};;
 
-application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date} => nrel_authors:
+application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_authors:
                                                         ${sys_indf_of_participant};;
 
 
-application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date} => nrel_name_of_article:
+application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_name_of_article:
 [${name_of_article}]
 (*
 <- lang_ru;;
 *);;
 
-application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date} => nrel_joint_authors:
+application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_joint_authors:
 [${joint_authors}]
 (*
 <- lang_ru;;
 *);;
 
-application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date} => nrel_participation_form:
+application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_participation_form:
 [${participation_form}]
 (*
 <- lang_ru;;
 *);;
 
 
-application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date} => nrel_conference_competition:
+application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_conference_competition:
 [${conference_competition}]
 (*
 <- lang_ru;;
 *);;
 
 
-application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date} => nrel_speaker:
+application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_speaker:
 [${speaker}]
 (*
 <- lang_ru;;
 *);;
 
 
-application_to_OSTIS_${conference_year}_${tanslited_name_of_article}_${sys_indf_of_participant}_${creation_date} => nrel_author_information:
-[Автор:${surname} ${name} ${middlename}, ученая степень: ${academic_degree}, ученое звание: ${academic_title}.
-Контактная информация: ${email}, ${organization}, ${position}, ${city},  ${country}.]
-(*
-<- lang_ru;;
-*);;
+application_${tanslited_name_of_article}_${sys_indf_of_participant} => nrel_application_date:
+[${creation_date}];;
