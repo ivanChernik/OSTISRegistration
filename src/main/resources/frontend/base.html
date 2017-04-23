@@ -25,8 +25,7 @@
 
     {% block head %}{% end %}
 
-    <script src="https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/1.7.13/jquery.popupoverlay.js"></script>
-    <script src="/static/components/js/generateApplication.js"></script>
+    <script src="/static/components/js/generate-conference-application.js"></script>
     <script src="/static/components/js/jquery.cookie.js"></script>
 </head>
 
@@ -70,7 +69,7 @@
     </div>
      <ul class="nav navbar-nav">
             <li>
-                <a  id="generate-application" href="#popup1">Подать заявку</a>
+                <a  id="generate-application" href="#application-overlay">Подать заявку</a>
             </li>
     </ul>
 
@@ -204,110 +203,108 @@
     </div>
  </div>
 
- <div id="popup1" class="overlay">
+<!-- Overlay start -->
+ <div id="application-overlay" class="overlay">
    <div class="popup">
       <p>Заявка на участие в международной научно-технической конференции OSTIS</p>
       <a class="close" href="#">&times;</a>
       <div class="content">
-         <div id="application-overlay"  class="container">
-            <div class="row">
-               <form role="form" action="" onsubmit="return false;">
-                  <div class="thumbnail col-xs-3">
-                     <div class="col-sm-6">
-                        <div class="form-group"> 
-                            <label for="name-of-article"><span class="required-field">*</span>Название статьи:</label> 
-                            <input  id="name-of-article" type="text" class="form-control" size="20" placeholder="Название статьи"required> 
-                            </div>
-                        <div class="form-group"> 
-                            <label for="article-authors"><span class="required-field">*</span>Соавторы статьи:</label> 
-                                <input  id="article-authors" type="text" class="form-control" placeholder="Соавторы статьи" required> 
-                        </div>
-                        <div class="form-group">
-                           <label for="form-of-participation"><span class="required-field">*</span>Форма участия:</label> 
-                           <select id="form-of-participation" class="selectpicker">
-                              <option>доклад</option>
-                              <option>публикация</option>
-                           </select>
-                        </div>
-                        <div class="form-group"> 
-                             <label for="speaker">Докладчик:</label> 
-                            <input id="speaker" type="text" class="form-control" placeholder="Докладчик" required>
-                         </div>
-                        <div class="form-group">
-                           <label for="conference-competition">Участие в конкурсах конференции:</label> 
-                           <select id="conference-competition" class="selectpicker">
-                              <option>конкурс научных докладов молодых учёных</option>
-                              <option>конкурс программных продуктов молодых учёных</option>
-                           </select>
-                        </div>
+         <div id="application-overlay" class="container">
+            <form id="application-form" role="form" action="" onsubmit="return false;">
+               <div class="thumbnail col-xs-3">
+                  <div class="col-sm-12">
+                     <div class="form-group"> 
+                        <label for="name-of-article"><span class="required-field">*</span>Название статьи:</label> 
+                        <input  id="name-of-article" type="text" class="form-control" size="20" placeholder="Название статьи"required> 
+                     </div>
+                     <div class="form-group"> 
+                        <label for="article-authors"><span class="required-field">*</span>Соавторы статьи:</label> 
+                        <input  id="article-authors" type="text" class="form-control" placeholder="Соавторы статьи" required> 
+                     </div>
+                     <div class="form-group">
+                        <label for="form-of-participation"><span class="required-field">*</span>Форма участия:</label> 
+                        <select id="form-of-participation" class="form-control">
+                           <option value="report">доклад</option>
+                           <option value="publication">публикация</option>
+                        </select>
+                     </div>
+                     <div class="form-group"> 
+                        <label for="speaker"><span class="required-field">*</span>Докладчик:</label> 
+                        <input id="speaker" type="text" class="form-control" placeholder="Докладчик" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="conference-competition"><span class="required-field">*</span>Участие в конкурсах конференции:</label><br>
+                        <input type="radio" name="conference-competition" value="young_scientist_report_competition" required>конкурс научных докладов молодых учёных<br>
+                        <input type="radio" name="conference-competition" value="young_scientist_software_competition" required>конкурс программных продуктов молодых учёных                        
                      </div>
                   </div>
-                  <div class="thumbnail col-xs-3">
-                     <p>Информация об авторах статьи</p>
-                     <div class="col-sm-6">
-                        <div class="form-group">
-                             <label for="surname"><span class="required-field">*</span>Фамилия:</label> 
-                             <input id="surname" type="text" class="form-control" placeholder="Фамилия"  required>
-                        </div>
-                        <div class="form-group"> 
-                            <label for="name"><span class="required-field">*</span>Имя:</label>
-                            <input id="name" type="text" class="form-control" placeholder="Имя" required> 
-                        </div>
-                        <div class="form-group"> 
-                            <label for="middle-name"><span class="required-field">*</span>Отчество:</label>
-                            <input id="middle-name" type="text" class="form-control" placeholder="Отчество"> 
-                        </div>
-                        <div class="form-group">
-                           <label for="academic-degree"><span class="required-field">*</span>Учёная степень:</label> 
-                           <select id="academic-degree" class="selectpicker" >
-                              <option>не имею</option>
-                              <option>кандидат наук</option>
-                              <option>доктор наук</option>
-                           </select>
-                        </div>
-                        <div class="form-group">
-                           <label for="academic-title"><span class="required-field">*</span>Учёное звание:</label> 
-                           <select id="academic-title" class="selectpicker">
-                              <option>не имею</option>
-                              <option>старший научный сотрудник</option>
-                              <option>доцент</option>
-                              <option>профессор</option>
-                           </select>
-                        </div>
+               </div>
+               <div class="thumbnail col-xs-3">
+                  <label for="">Информация об авторах статьи:</label> 
+                  <div class="col-sm-8">
+                     <div class="form-group">
+                        <label for="last-name"><span class="required-field">*</span>Фамилия:</label> 
+                        <input id="last-name" type="text" class="form-control" placeholder="Фамилия"  required>
+                     </div>
+                     <div class="form-group"> 
+                        <label for="first-name"><span class="required-field">*</span>Имя:</label>
+                        <input id="first-name" type="text" class="form-control" placeholder="Имя" required> 
+                     </div>
+                     <div class="form-group"> 
+                        <label for="middle-name">Отчество:</label>
+                        <input id="middle-name" type="text" class="form-control" placeholder="Отчество"> 
+                     </div>
+                     <div class="form-group">
+                        <label for="academic-degree"><span class="required-field">*</span>Учёная степень:</label> 
+                        <select id="academic-degree" class="form-control" >
+                           <option value="none">не имею</option>
+                           <option value="candidate_sciences">кандидат наук</option>
+                           <option value="doctor_sciences">доктор наук</option>
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label for="academic-title"><span class="required-field">*</span>Учёное звание:</label> 
+                        <select id="academic-title" class="form-control">
+                           <option value="none">не имею</option>
+                           <option value="senior_researcher">старший научный сотрудник</option>
+                           <option value="docent">доцент</option>
+                           <option value="professor">профессор</option>
+                        </select>
                      </div>
                   </div>
-                  <div class="thumbnail col-xs-3">
-                     <div class="col-sm-6">
-                         <div class="form-group"> 
-                            <label for="email"><span class="required-field">*</span>Email:</label> 
-                            <input id="email" type="email" class="form-control" placeholder="Email" required> 
-                        </div>
-                        <div class="form-group"> 
-                            <label for="country"><span class="required-field">*</span>Страна:</label> 
-                            <input id="country" type="text" class="form-control" placeholder="Страна" required>
-                        </div>
-                        <div class="form-group"> 
-                            <label for="city"><span class="required-field">*</span>Город:</label>
-                            <input id="city" type="text" class="form-control" placeholder="Город" id="city" name="city" required> 
-                        </div>
-                        <div class="form-group"> 
-                            <label for="organization"><span class="required-field">*</span>Место работы (организация):</label> 
-                            <input id="organization" type="text" class="form-control" placeholder="Организация" required> 
-                        </div>
-                        <div class="form-group"> 
-                            <label for="position"><span class="required-field">*</span>Место работы (должность):</label> 
-                            <input id="position" type="text" class="form-control" placeholder="Должность" required> 
-                        </div>
+                  <p></p>
+               </div>
+               <div class="thumbnail col-xs-2">
+                  <div class="col-sm-12">
+                     <div class="form-group"> 
+                        <label for="email"><span class="required-field">*</span>Email:</label> 
+                        <input id="email" type="email" class="form-control" placeholder="Email" required> 
+                     </div>
+                     <div class="form-group"> 
+                        <label for="country"><span class="required-field">*</span>Страна:</label> 
+                        <input id="country" type="text" class="form-control" placeholder="Страна" required>
+                     </div>
+                     <div class="form-group"> 
+                        <label for="city"><span class="required-field">*</span>Город:</label>
+                        <input id="city" type="text" class="form-control" placeholder="Город" id="city" name="city" required> 
+                     </div>
+                     <div class="form-group"> 
+                        <label for="organization"><span class="required-field">*</span>Место работы (организация):</label> 
+                        <input id="organization" type="text" class="form-control" placeholder="Организация" required> 
+                     </div>
+                     <div class="form-group"> 
+                        <label for="position"><span class="required-field">*</span>Место работы (должность):</label> 
+                        <input id="position" type="text" class="form-control" placeholder="Должность" required> 
                      </div>
                      <button id="send-application" type="submit" class="btn btn-success">Отправить заявку</button>
                   </div>
-            </div>
+               </div>
             </form>
          </div>
       </div>
    </div>
 </div>
-</div>
+<!-- Overlay end -->
 
 
 </body>

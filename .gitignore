@@ -1,0 +1,9 @@
+/.idea/
+/OSTISRegistration.iml
+/target/
+OSTISRegistration.iml
+src/main/resources/class_diagram.uml
+target/
+/.idea/libraries/
+/.idea/inspectionProfiles/
+/.idea/libraries/Maven__antlr_antlr_2_7_7.xml
