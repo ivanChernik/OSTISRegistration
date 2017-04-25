@@ -52,7 +52,7 @@ public class TranslationServiceImpl implements TranslationService {
     @Override
     public TranslitedParticipant createTranslitedParticipant(Participant participant) {
 
-        Application application = participant.getApplicationList().get(0);
+        Application application = participant.getApplication();
 
         TranslitedParticipant translitedParticipant = new TranslitedParticipant();
 

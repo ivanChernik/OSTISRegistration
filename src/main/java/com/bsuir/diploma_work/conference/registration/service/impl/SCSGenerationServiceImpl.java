@@ -30,11 +30,11 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
     private static final Logger logger = getLogger(SCSGenerationServiceImpl.class);
 
     private static final String UTF_8 = "utf-8";
-    private static final String DD_MM_YYYY = "dd_MM_yyyy";
+    private static final String DD_MM_YYYY = "dd-MM-yyyy";
     private static final String SCS = ".scs";
 
-    private static final String APPLICATION_TEMPLATE_FILE = "templates/ostis_application.vm";
-    private static final String PARTICIPANT_TEMPLATE_FILE = "templates/ostis_participant.vm";
+    private static final String APPLICATION_TEMPLATE_FILE = "templates/scs/ostis_application.vm";
+    private static final String PARTICIPANT_TEMPLATE_FILE = "templates/scs/ostis_participant.vm";
 
 
     @Value("${scs.destination.application.path}")
@@ -70,7 +70,7 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
         model.put("sys_indf_of_participant", participant.getSysIndf());
         model.put("translited_lastname_of_participant", translitedParticipant.getLastName());
 
-        Application application = participant.getApplicationList().get(0);
+        Application application = participant.getApplication();
 
         model.put("speaker", application.getSpeaker());
         model.put("conference_competition", application.getConferenceCompetition());

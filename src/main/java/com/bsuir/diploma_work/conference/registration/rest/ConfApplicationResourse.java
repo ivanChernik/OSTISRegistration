@@ -4,13 +4,12 @@ package com.bsuir.diploma_work.conference.registration.rest;
 import com.bsuir.diploma_work.conference.registration.domain.Application;
 import com.bsuir.diploma_work.conference.registration.domain.Participant;
 import com.bsuir.diploma_work.conference.registration.domain.tanslit.TranslitedParticipant;
-import com.bsuir.diploma_work.conference.registration.exception.service.ApplicationAlreadyExistsException;
-import com.bsuir.diploma_work.conference.registration.service.ParticipantService;
+import com.bsuir.diploma_work.conference.registration.service.MailingService;
 import com.bsuir.diploma_work.conference.registration.service.SCSGenerationService;
 import com.bsuir.diploma_work.conference.registration.service.TranslationService;
-import com.bsuir.diploma_work.conference.registration.util.ApplyExternalProperty;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static com.bsuir.diploma_work.conference.registration.util.ResponseMessageTemplates.APPLICATION_ALREADY_EXISTS;
+import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -26,6 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class ConfApplicationResourse {
 
     private static final Logger logger = getLogger(ConfApplicationResourse.class);
+    private static final String STATUS_OK = "{\"status\":\"ok\"}";
 
     @Autowired
     private SCSGenerationService scsGenerationService;
@@ -34,10 +34,10 @@ public class ConfApplicationResourse {
     private TranslationService translationService;
 
     @Autowired
-    private ParticipantService participantService;
+    private MailingService mailingService;
 
-    @Autowired
-    private ApplyExternalProperty applyExternalProperty;
+    @Value("${conference.year}")
+    private int conferenceYear;
 
     @CrossOrigin()
     @RequestMapping(value = "/generate", method = POST, consumes = "application/json")
@@ -45,43 +45,26 @@ public class ConfApplicationResourse {
 
         logger.debug("Received participant: {}", participant);
 
-        Application application = getApplication(participant);
+        Application application = participant.getApplication();
+        application.setConferenceYear(conferenceYear);
 
-        try {
-            applyExternalProperty.applyConferenceYear(application);
-            participantService.checkExistingApplication(application);
-        } catch (ApplicationAlreadyExistsException e) {
-            return APPLICATION_ALREADY_EXISTS;
-        }
 
         processApplicationAndParticipant(participant);
 
-        return "welcome";
+        mailingService.sendEmailToParticipant(participant);
+        return STATUS_OK;
     }
 
     private void processApplicationAndParticipant(Participant participant) {
 
-        Participant checkedParticipant = participantService
-                .getExistingParticipantByNameAndEmail(participant);
-
-        Application application = getApplication(checkedParticipant);
-
-        if (checkedParticipant.isNewComer()) {
-            translationService.createTranslitSysIndf(checkedParticipant);
-            participantService.saveParticipantAndApplication(checkedParticipant);
-            scsGenerationService.generateParticipant(checkedParticipant);
-        } else {
-            participantService.saveApplication(application);
+        if (isEmpty(participant.getSysIndf())) {
+            translationService.createTranslitSysIndf(participant);
         }
 
+        scsGenerationService.generateParticipant(participant);
         TranslitedParticipant translitedParticipant = translationService
                 .createTranslitedParticipant(participant);
-        scsGenerationService.generateApplication(checkedParticipant, translitedParticipant);
+        scsGenerationService.generateApplication(participant, translitedParticipant);
     }
-
-    private Application getApplication(Participant participant) {
-        return participant.getApplicationList().get(0);
-    }
-
 
 }

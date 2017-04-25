@@ -1,0 +1,11 @@
+Уважаемый(ая), ${surname} ${name}#if(${middlename}) ${middlename}#end,<br>
+&nbsp;ваша заявка &ldquo;${name_of_article}&rdquo; на обработке.<br>
+<br>
+<br>
+С уважением,<br>
+Организационных коммитет,<br>
+OSTIS-${conference_year}<br>
+
+<a href="http://conf.ostis.net/index.php?title=%D0%9A%D0%BE%D0%BD%D1%84%D0%B5%D1%80%D0%B5%D0%BD%D1%86%D0%B8%D0%B8_OSTIS">
+Conf.ostis.net</a><br>
+<a href="http://proc.ostis.net/eng/autors.html">For Authors</a>
