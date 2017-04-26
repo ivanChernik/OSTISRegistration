@@ -13,8 +13,7 @@
     <link rel="stylesheet" type="text/css" href="/static/common/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/static/common/bootstrap/css/bootstrap-multilevel.css" />
     <link rel="stylesheet" type="text/css" href="/static/components/css/common.css" />
-    <link rel="stylesheet" type="text/css" href="/static/components/css/overlay.css" />
-
+ 
     {% block extrastyles %}{% end %}
 
     {% include 'common.html' %}
@@ -25,7 +24,11 @@
 
     {% block head %}{% end %}
 
+    <!-- overlay for application to conference OSTIS -->
     <script src="/static/components/js/generate-conference-application.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/components/css/overlay.css" />
+
+
     <script src="/static/components/js/jquery.cookie.js"></script>
 </head>
 
@@ -203,7 +206,7 @@
     </div>
  </div>
 
-<!-- Overlay start -->
+<!-- Overlay for application to conference OSTIS start -->
  <div id="application-overlay" class="overlay">
    <div class="popup">
       <p>Заявка на участие в международной научно-технической конференции OSTIS</p>
@@ -215,11 +218,11 @@
                   <div class="col-sm-12">
                      <div class="form-group"> 
                         <label for="name-of-article"><span class="required-field">*</span>Название статьи:</label> 
-                        <input  id="name-of-article" type="text" class="form-control" size="20" placeholder="Название статьи"required> 
+                        <input  id="name-of-article" type="text" class="form-control" maxlength="80" placeholder="Название статьи"required> 
                      </div>
                      <div class="form-group"> 
                         <label for="article-authors"><span class="required-field">*</span>Соавторы статьи:</label> 
-                        <input  id="article-authors" type="text" class="form-control" placeholder="Соавторы статьи" required> 
+                        <input  id="article-authors" type="text" class="form-control" maxlength="80" placeholder="Соавторы статьи" required> 
                      </div>
                      <div class="form-group">
                         <label for="form-of-participation"><span class="required-field">*</span>Форма участия:</label> 
@@ -230,7 +233,7 @@
                      </div>
                      <div class="form-group"> 
                         <label for="speaker"><span class="required-field">*</span>Докладчик:</label> 
-                        <input id="speaker" type="text" class="form-control" placeholder="Докладчик" required>
+                        <input id="speaker" type="text" class="form-control" maxlength="50" placeholder="Докладчик" required>
                      </div>
                      <div class="form-group">
                         <label for="conference-competition"><span class="required-field">*</span>Участие в конкурсах конференции:</label><br>
@@ -244,15 +247,15 @@
                   <div class="col-sm-8">
                      <div class="form-group">
                         <label for="last-name"><span class="required-field">*</span>Фамилия:</label> 
-                        <input id="last-name" type="text" class="form-control" placeholder="Фамилия"  required>
+                        <input id="last-name" type="text" class="form-control" maxlength="50" placeholder="Фамилия"  required>
                      </div>
                      <div class="form-group"> 
                         <label for="first-name"><span class="required-field">*</span>Имя:</label>
-                        <input id="first-name" type="text" class="form-control" placeholder="Имя" required> 
+                        <input id="first-name" type="text" class="form-control" maxlength="50" placeholder="Имя" required> 
                      </div>
                      <div class="form-group"> 
                         <label for="middle-name">Отчество:</label>
-                        <input id="middle-name" type="text" class="form-control" placeholder="Отчество"> 
+                        <input id="middle-name" type="text" class="form-control" maxlength="50" placeholder="Отчество"> 
                      </div>
                      <div class="form-group">
                         <label for="academic-degree"><span class="required-field">*</span>Учёная степень:</label> 
@@ -278,23 +281,23 @@
                   <div class="col-sm-12">
                      <div class="form-group"> 
                         <label for="email"><span class="required-field">*</span>Email:</label> 
-                        <input id="email" type="email" class="form-control" placeholder="Email" required> 
+                        <input id="email" type="email" class="form-control" maxlength="30" placeholder="Email" required>
                      </div>
                      <div class="form-group"> 
                         <label for="country"><span class="required-field">*</span>Страна:</label> 
-                        <input id="country" type="text" class="form-control" placeholder="Страна" required>
+                        <input id="country" type="text" class="form-control" maxlength="50" placeholder="Страна" required>
                      </div>
                      <div class="form-group"> 
                         <label for="city"><span class="required-field">*</span>Город:</label>
-                        <input id="city" type="text" class="form-control" placeholder="Город" id="city" name="city" required> 
+                        <input id="city" type="text" class="form-control" maxlength="50" placeholder="Город" required> 
                      </div>
                      <div class="form-group"> 
                         <label for="organization"><span class="required-field">*</span>Место работы (организация):</label> 
-                        <input id="organization" type="text" class="form-control" placeholder="Организация" required> 
+                        <input id="organization" type="text" class="form-control" maxlength="50" placeholder="Организация" required> 
                      </div>
                      <div class="form-group"> 
                         <label for="position"><span class="required-field">*</span>Место работы (должность):</label> 
-                        <input id="position" type="text" class="form-control" placeholder="Должность" required> 
+                        <input id="position" type="text" class="form-control" maxlength="50" placeholder="Должность" required> 
                      </div>
                      <button id="send-application" type="submit" class="btn btn-success">Отправить заявку</button>
                   </div>

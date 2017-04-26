@@ -1,12 +1,54 @@
+/* Hash map custom implementation */
+
+HashMap = function(){
+  this._dict = [];
+}
+HashMap.prototype._get = function(key){
+  for(var i=0, couplet; couplet = this._dict[i]; i++){
+    if(couplet[0] === key){
+      return couplet;
+    }
+  }
+}
+HashMap.prototype.put = function(key, value){
+  var couplet = this._get(key);
+  if(couplet){
+    couplet[1] = value;
+  }else{
+    this._dict.push([key, value]);
+  }
+  return this; // for chaining
+}
+HashMap.prototype.get = function(key){
+  var couplet = this._get(key);
+  if(couplet){
+    return couplet[1];
+  }
+}
+
+/* Hash map custom implementation */
 
 var loadingSpinnerHtml = '<div id="circleG" class="row"><div id="circleG_1" class="circleG"></div><div id="circleG_2" class="circleG"></div><div id="circleG_3" class="circleG"></div></div><p></p>'
 var successfulMessage = '<div  id="successful-message"class="alert alert-success fade in"><strong>Success!</strong> Notification was sent in entried email.</div>';
 var errorMessage = '<div id="error-message" class="alert alert-danger fade in"><strong>Internal Server Error!</strong> Use usual way to be applied for coneference.</div>';
 
+
+var selectMap = new HashMap;
+
+selectMap.put('report', 'доклад').
+    put('publication', 'публикация').
+    put('young_scientist_report_competition', 'конкурс научных докладов молодых учёных').
+    put('young_scientist_software_competition', 'конкурс программных продуктов молодых учёных').
+    put('none', 'не имею').
+    put('candidate_sciences', 'кандидат наук').
+    put('doctor_sciences', 'доктор наук').
+    put('senior_researcher', 'старший научный сотрудник').
+    put('docent', 'доцент').
+    put('professor', 'профессор');
  
  $( document ).ready(function() {
  	sendRequestButtonListener();
- 	clearInputsForm();
+ 	clickGenerateApplication();
  });
 
 function sendRequestButtonListener() {
@@ -17,21 +59,27 @@ function sendRequestButtonListener() {
 
 	startSpinner();
  
-	retrieveSystemIndf($("#first-name").val(),
+	var sysIndf = retrieveSystemIndf($("#first-name").val(),
 		$("#last-name").val(),$("#middle-name").val());
 			
-		var data = JSON.stringify(obtainParticipantData());
+		var data = JSON.stringify(obtainParticipantData(sysIndf));
 		console.log(data);
-
 		$.ajax({
   		type: "POST",
   		contentType: "application/json",
-  		dataType: "json",
+  		timeout: 15000,
   		url: "http://localhost:8080/ostis/application/generate",
   		data: data,
-  		success: function(){
+  		success: function(resultData){
+  			console.log(resultData);
   			stopSpinner();
-  			$("#application-form").before(successfulMessage);
+  			resultData = jQuery.parseJSON(resultData);
+  			if(resultData.status == "ok"){
+  				clearInputsForm();
+  				$("#application-form").before(successfulMessage);
+  			}else{
+  				$("#application-form").before(errorMessage);
+  			}
   		},
   		error: function(xhr, ajaxOptions, thrownError){
   			console.log(xhr);
@@ -50,6 +98,7 @@ function sendRequestButtonListener() {
  		$("#academic-degree").val() &&
  		$("#academic-title").val() &&
  		$("#email").val() &&
+ 	//	isValidEmail($("#email").val()) &&
  		$("#country").val() &&
  		$("#city").val() &&
  		$("#organization").val() &&
@@ -64,14 +113,15 @@ function sendRequestButtonListener() {
  	return false;
  }
 
- function obtainParticipantData(){
+
+ function obtainParticipantData(sysIndf){
  	var participant = {};
  	
  	participant.lastName = $("#last-name").val();
  	participant.firstName = $("#first-name").val();
  	participant.middleName = $("#middle-name").val();
- 	participant.academicDegree = $("#academic-degree").val();
- 	participant.academicTitle = $("#academic-title").val();
+ 	participant.academicDegree = selectMap.get($("#academic-degree").val());
+ 	participant.academicTitle = selectMap.get($("#academic-title").val());
  	participant.email = $("#email").val();
 
  	var workingPlace = {}
@@ -86,10 +136,16 @@ function sendRequestButtonListener() {
 
  	application.nameOfArticle = $("#name-of-article").val();
  	application.authorsOfArticle = $("#article-authors").val();
- 	application.participationForm = $("#form-of-participation").val();
+ 	application.participationForm = selectMap.get($("#form-of-participation").val());
  	application.speaker = $("#speaker").val();
- 	application.conferenceCompetition = $("[name='conference-competition']").val();
- 	participant.applicationList = [application];
+ 	application.conferenceCompetition = selectMap.get($("[name='conference-competition']").val());
+ 	participant.application = application;
+
+ 	if(sysIndf){
+ 		participant.sysIndf = sysIndf;
+ 	}else{
+ 		participant.sysIndf = "";
+ 	}
 
  	return participant;
  }
@@ -101,7 +157,11 @@ function startSpinner(){
 }
 
 function stopSpinner(){
-	$("#circleG").remove();
+	var circleG = $("#circleG");
+
+	if(circleG.length){
+		circleG.remove();
+	}
 }
 
 
@@ -142,9 +202,14 @@ function retrieveSystemIndf(firstName, lastName, middleName){
 }
 
 
-function clearInputsForm(){
-
+function clickGenerateApplication(){
 	$("#generate-application").on("click",function(){
+		clearInputsForm();
+		$(".alert").remove();
+	})
+}
+
+function clearInputsForm(){
 			$("#last-name").val('');
 	 		$("#first-name").val('');
 	 		$("#middle-name").val('');
@@ -160,8 +225,8 @@ function clearInputsForm(){
 	 		$("#academic-degree").val('none');
 	 		$("#academic-title").val('none');
 	 		$("[name='conference-competition']").prop("checked", false);
-			$(".alert").remove();
 			stopSpinner();
-	 	})
 }
+
+
 
