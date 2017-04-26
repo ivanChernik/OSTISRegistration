@@ -30,7 +30,9 @@ public class TranslationServiceImpl implements TranslationService {
     @Override
     public void createTranslitSysIndf(Participant participant) {
         String lastName = tanslit(participant.getLastName());
-        String fistNameFirstChar = tanslit(participant.getFirstName().substring(0, 1));
+        //first char to Upper case
+        lastName = Character.toUpperCase(lastName.charAt(0)) + lastName.substring(1);
+        String fistNameFirstChar = tanslit(participant.getFirstName().substring(0, 1)).toUpperCase();
 
         String middleName = participant.getMiddleName();
         String middleNameFirstChar = "";
@@ -38,15 +40,16 @@ public class TranslationServiceImpl implements TranslationService {
         String sysIndf = "";
 
         if (middleName != null && !middleName.isEmpty()) {
-            middleNameFirstChar = tanslit(middleName.substring(0, 1));
+            middleNameFirstChar = tanslit(middleName.substring(0, 1)).toUpperCase();
             sysIndf = lastName + "_" + fistNameFirstChar + "_" + middleNameFirstChar;
         } else {
             sysIndf = lastName + "_" + fistNameFirstChar;
         }
 
+        sysIndf = sysIndf.replaceAll(REGEX_CHECKING_SPECIAL_ARTICLES, "");
         participant.setSysIndf(sysIndf);
 
-        logger.debug("Result system identificator", sysIndf);
+        logger.debug("Result system identificator {}", sysIndf);
     }
 
     @Override
@@ -57,7 +60,11 @@ public class TranslationServiceImpl implements TranslationService {
         TranslitedParticipant translitedParticipant = new TranslitedParticipant();
 
         translitedParticipant.setTanslitedApplication(translitApplication(application));
-        translitedParticipant.setLastName(tanslit(participant.getLastName()));
+
+        String translitedLastName = tanslit(participant.getLastName());
+        translitedLastName = translitedLastName
+                .replaceAll(REGEX_CHECKING_SPECIAL_ARTICLES, "");
+        translitedParticipant.setLastName(translitedLastName);
 
         return translitedParticipant;
     }

@@ -11,14 +11,14 @@ public class Participant implements Serializable {
     private String sysIndf;
 
     @NotNull
-    @Size(max = 100)
+    @Size(max = 50)
     private String firstName;
 
     @NotNull
-    @Size(max = 100)
+    @Size(max = 50)
     private String lastName;
 
-    @Size(max = 100)
+    @Size(max = 50)
     private String middleName;
 
     @NotNull
@@ -28,7 +28,7 @@ public class Participant implements Serializable {
     private String academicTitle;
 
     @NotNull
-    @Size(max = 50)
+    @Size(max = 30)
     private String email;
 
     @NotNull

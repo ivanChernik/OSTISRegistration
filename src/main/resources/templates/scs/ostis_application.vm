@@ -7,7 +7,7 @@ OSTIS-${conference_year}: ${name_of_article}]
 
 application_to_OSTIS_${conference_year} -> application_${translited_lastname_of_participant}_${translited_name_of_article};;
 
-application_${translited_lastname_of_participant}_${translited_name_of_article} => nrel_authors:  ${sys_indf_of_participant};;
+application_${translited_lastname_of_participant}_${translited_name_of_article} => nrel_application:  ${sys_indf_of_participant};;
 
 
 application_${translited_lastname_of_participant}_${translited_name_of_article} => nrel_name_of_article:

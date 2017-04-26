@@ -9,18 +9,18 @@ public class Application implements Serializable {
 
 
     @NotNull
-    @Size(max = 250)
+    @Size(max = 80)
     private String nameOfArticle;
 
     @NotNull
-    @Size(max = 300)
+    @Size(max = 80)
     private String authorsOfArticle;
 
     @NotNull
     private String participationForm;
 
     @NotNull
-    @Size(max = 250)
+    @Size(max = 50)
     private String speaker;
 
     @NotNull

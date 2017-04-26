@@ -8,18 +8,19 @@ import java.io.Serializable;
 public class WorkingPlace implements Serializable {
 
     @NotNull
-    @Size(max = 100)
+    @Size(max = 50)
     private String country;
 
     @NotNull
-    @Size(max = 100)
+    @Size(max = 50)
     private String city;
 
     @NotNull
-    @Size(max = 250)
+    @Size(max = 50)
     private String organization;
 
     @NotNull
+    @Size(max = 50)
     private String position;
 
     public WorkingPlace() {
