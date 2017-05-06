@@ -1,5 +1,10 @@
 /* Hash map custom implementation */
 
+
+
+var rest_url = "http://localhost:8080/ostis/application/generate";
+
+
 HashMap = function(){
   this._dict = [];
 }
@@ -68,7 +73,7 @@ function sendRequestButtonListener() {
   		type: "POST",
   		contentType: "application/json",
   		timeout: 15000,
-  		url: "http://localhost:8080/ostis/application/generate",
+  		url: rest_url,
   		data: data,
   		success: function(resultData){
   			console.log(resultData);
@@ -98,7 +103,7 @@ function sendRequestButtonListener() {
  		$("#academic-degree").val() &&
  		$("#academic-title").val() &&
  		$("#email").val() &&
- 	//	isValidEmail($("#email").val()) &&
+ 		isValidEmail($("#email").val()) &&
  		$("#country").val() &&
  		$("#city").val() &&
  		$("#organization").val() &&
@@ -113,6 +118,10 @@ function sendRequestButtonListener() {
  	return false;
  }
 
+function isValidEmail(email) {
+  var re = /[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/;
+  return re.test(email);
+}
 
  function obtainParticipantData(sysIndf){
  	var participant = {};

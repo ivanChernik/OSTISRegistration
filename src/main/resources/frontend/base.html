@@ -28,6 +28,9 @@
     <script src="/static/components/js/generate-conference-application.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/components/css/overlay.css" />
 
+    <!-- jquery data table plugin -->
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" />
 
     <script src="/static/components/js/jquery.cookie.js"></script>
 </head>
@@ -281,7 +284,7 @@
                   <div class="col-sm-12">
                      <div class="form-group"> 
                         <label for="email"><span class="required-field">*</span>Email:</label> 
-                        <input id="email" type="email" class="form-control" maxlength="30" placeholder="Email" required>
+                        <input id="email" type="email" class="form-control" maxlength="30" pattern="^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$" placeholder="Email" required> 
                      </div>
                      <div class="form-group"> 
                         <label for="country"><span class="required-field">*</span>Страна:</label> 
