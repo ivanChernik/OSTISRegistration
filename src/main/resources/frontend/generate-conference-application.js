@@ -72,7 +72,7 @@ function sendRequestButtonListener() {
 
 		setTimeout(() => {
 				 resolve();
-			 }, 2000);
+			 }, 3000);
 
 		console.log(sysIndf);
 
