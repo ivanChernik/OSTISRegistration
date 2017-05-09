@@ -8,6 +8,8 @@ public interface SCSGenerationService {
 
     void generateApplication(Participant participant, TranslitedParticipant translitedParticipant);
 
-    void generateParticipant(Participant participant);
+    void generateNewParticipant(Participant participant);
+
+    void generateExistingParticipant(Participant participant);
 
 }

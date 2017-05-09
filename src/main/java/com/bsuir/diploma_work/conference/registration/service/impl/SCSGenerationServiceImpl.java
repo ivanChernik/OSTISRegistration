@@ -34,14 +34,18 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
     private static final String SCS = ".scs";
 
     private static final String APPLICATION_TEMPLATE_FILE = "templates/scs/ostis_application.vm";
-    private static final String PARTICIPANT_TEMPLATE_FILE = "templates/scs/ostis_participant.vm";
-
+    private static final String NEW_PARTICIPANT_TEMPLATE_FILE = "templates/scs/ostis_new_participant.vm";
+    private static final String EXISTING_PARTICIPANT_TEMPLATE_FILE = "templates/scs/ostis_existing_participant.vm";
 
     @Value("${scs.destination.application.path}")
     private String destinationPathApplicationSCS;
 
-    @Value("${scs.destination.participant.path}")
-    private String destinationPathParticipantSCS;
+    @Value("${scs.destination.new.participant.path}")
+    private String destinationPathNewParticipantSCS;
+
+    @Value("${scs.destination.existing.participant.path}")
+    private String destinationPathExistingParticipantSCS;
+
 
     @Value("${conference.year}")
     private int conferenceYear;
@@ -96,11 +100,23 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
 
 
     @Override
-    public void generateParticipant(Participant participant) {
-        String fileBody = generateFileBody(PARTICIPANT_TEMPLATE_FILE,
+    public void generateNewParticipant(Participant participant) {
+        logger.debug("Generate new participant");
+        String fileBody = generateFileBody(NEW_PARTICIPANT_TEMPLATE_FILE,
                 generateParticipantModel(participant));
 
-        createFile(fileBody, generateFileNameParticipant(participant.getSysIndf()));
+        createFile(fileBody, generateFileNameParticipant(participant.getSysIndf(),
+                destinationPathNewParticipantSCS));
+    }
+
+    @Override
+    public void generateExistingParticipant(Participant participant) {
+        logger.debug("Generate existing participant");
+        String fileBody = generateFileBody(EXISTING_PARTICIPANT_TEMPLATE_FILE,
+                generateParticipantModel(participant));
+
+        createFile(fileBody, generateFileNameParticipant(participant.getSysIndf(),
+                destinationPathExistingParticipantSCS));
     }
 
     private Map<String, Object> generateParticipantModel(Participant participant) {
@@ -124,8 +140,9 @@ public class SCSGenerationServiceImpl implements SCSGenerationService {
         return model;
     }
 
-    private String generateFileNameParticipant(String sysIndf) {
-        return destinationPathParticipantSCS + sysIndf + SCS;
+
+    private String generateFileNameParticipant(String sysIndf, String destinationPath) {
+        return destinationPath + sysIndf + SCS;
     }
 
 

@@ -1,10 +1,6 @@
+var rest_url = "http://localhost:8099/ostis/application/generate";
+
 /* Hash map custom implementation */
-
-
-
-var rest_url = "http://localhost:8080/ostis/application/generate";
-
-
 HashMap = function(){
   this._dict = [];
 }
@@ -56,6 +52,8 @@ selectMap.put('report', 'доклад').
  	clickGenerateApplication();
  });
 
+ var sysIndf = '';
+
 function sendRequestButtonListener() {
 
 	$("#send-application").on("click",function(){
@@ -63,36 +61,49 @@ function sendRequestButtonListener() {
 	if(!isValidRequiredInput()) {return;}
 
 	startSpinner();
- 
-	var sysIndf = retrieveSystemIndf($("#first-name").val(),
-		$("#last-name").val(),$("#middle-name").val());
-			
-		var data = JSON.stringify(obtainParticipantData(sysIndf));
-		console.log(data);
-		$.ajax({
-  		type: "POST",
-  		contentType: "application/json",
-  		timeout: 15000,
-  		url: rest_url,
-  		data: data,
-  		success: function(resultData){
-  			console.log(resultData);
-  			stopSpinner();
-  			resultData = jQuery.parseJSON(resultData);
-  			if(resultData.status == "ok"){
-  				clearInputsForm();
-  				$("#application-form").before(successfulMessage);
-  			}else{
-  				$("#application-form").before(errorMessage);
-  			}
-  		},
-  		error: function(xhr, ajaxOptions, thrownError){
-  			console.log(xhr);
-  			console.log(ajaxOptions);
-  			console.log(thrownError);
-  			stopSpinner();
-  			$("#application-form").before(errorMessage);
-  		}});
+
+	new Promise(function (resolve, reject) {
+	
+		sysIndf = '';
+	 
+		retrieveSystemIndf($("#first-name").val(),
+			$("#last-name").val(),$("#middle-name").val());
+
+
+		setTimeout(() => {
+				 resolve();
+			 }, 2000);
+
+		console.log(sysIndf);
+
+		}).then(response => {
+			var data = JSON.stringify(obtainParticipantData(sysIndf));
+			console.log(data);
+			$.ajax({
+	  		type: "POST",
+	  		contentType: "application/json",
+	  		timeout: 15000,
+	  		url: rest_url,
+	  		data: data,
+	  		success: function(resultData){
+	  			console.log(resultData);
+	  			stopSpinner();
+	  			resultData = jQuery.parseJSON(resultData);
+	  			if(resultData.status == "ok"){
+	  				clearInputsForm();
+	  				$("#application-form").before(successfulMessage);
+	  			}else{
+	  				$("#application-form").before(errorMessage);
+	  			}
+	  		},
+	  		error: function(xhr, ajaxOptions, thrownError){
+	  			console.log(xhr);
+	  			console.log(ajaxOptions);
+	  			console.log(thrownError);
+	  			stopSpinner();
+	  			$("#application-form").before(errorMessage);
+	  		}});
+	   });
 	});
  }
 
@@ -123,7 +134,7 @@ function isValidEmail(email) {
   return re.test(email);
 }
 
- function obtainParticipantData(sysIndf){
+ function obtainParticipantData(){
  	var participant = {};
  	
  	participant.lastName = $("#last-name").val();
@@ -153,8 +164,9 @@ function isValidEmail(email) {
  	if(sysIndf){
  		participant.sysIndf = sysIndf;
  	}else{
- 		participant.sysIndf = "";
+ 		participant.sysIndf = '';
  	}
+ 	
 
  	return participant;
  }
@@ -176,6 +188,9 @@ function stopSpinner(){
 
 function retrieveSystemIndf(firstName, lastName, middleName){
 
+
+	
+
 	var mainIdtf = lastName.trim() + " " + firstName.trim();
 
 	if(middleName){
@@ -183,31 +198,61 @@ function retrieveSystemIndf(firstName, lastName, middleName){
 	}
 
 	var nrel_system_idtf_addr;
-	var sysIndf;
 
-	SCWeb.core.Server.resolveScAddr(['nrel_system_identifier'], function (keynodes) {
-      	nrel_system_idtf_addr = keynodes['nrel_system_identifier'];});
+		SCWeb.core.Server.resolveScAddr(['nrel_system_identifier'], function (keynodes) {
+	      	nrel_system_idtf_addr = keynodes['nrel_system_identifier'];});
 
-	SCWeb.core.Server.findIdentifiersSubStr(mainIdtf, function(data) {     
-		
-		if(data.main[0]){
-			var sysIndfAddr = data.main[0][0];
-		  	window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
-		        sysIndfAddr,
-		        sc_type_arc_common | sc_type_const,
-		        sc_type_link,
-		        sc_type_arc_pos_const_perm,
-		        nrel_system_idtf_addr]).
-		      done(function(identifiers){  
-		        window.sctpClient.get_link_content(identifiers[0][2],'string').done(function(content){
-		          console.log('System indf: ' + content);
-		          sysIndf = content;
-		         });        
-		 	});
-	    }
-	});
+		SCWeb.core.Server.findIdentifiersSubStr(mainIdtf, function(data) {     
+			
+			if(data.main[0]){
+				var sysIndfAddr = data.main[0][0];
+			  	window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+			        sysIndfAddr,
+			        sc_type_arc_common | sc_type_const,
+			        sc_type_link,
+			        sc_type_arc_pos_const_perm,
+			        nrel_system_idtf_addr]).
+			      done(function(identifiers){  
+			        window.sctpClient.get_link_content(identifiers[0][2],'string').done(function(content){
+			          console.log('System indf: ' + content);
+			          sysIndf = content;
+			         });        
+			 	});
+		    }
+		});
 
-	return sysIndf;
+	   // search by Ivanov I. I. pattern
+		if(!sysIndf){
+
+			mainIdtf = lastName.trim() + " " + firstName.trim().charAt(0).toUpperCase() + ".";
+
+			if(middleName){
+				mainIdtf = mainIdtf + " " + middleName.trim().charAt(0).toUpperCase() + ".";
+			}
+
+			console.log(mainIdtf);
+
+			SCWeb.core.Server.findIdentifiersSubStr(mainIdtf, function(data) {     
+				
+				if(data.main[0]){
+					var sysIndfAddr = data.main[0][0];
+				  	window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+				        sysIndfAddr,
+				        sc_type_arc_common | sc_type_const,
+				        sc_type_link,
+				        sc_type_arc_pos_const_perm,
+				        nrel_system_idtf_addr]).
+				      done(function(identifiers){  
+				        window.sctpClient.get_link_content(identifiers[0][2],'string').done(function(content){
+				          console.log('System indf: ' + content);
+				          sysIndf = content;
+				         });        
+				 	});
+			    }
+			});
+
+		}
+
 }
 
 

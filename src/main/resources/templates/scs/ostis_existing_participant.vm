@@ -1,0 +1,9 @@
+${sys_idnf} => nrel_email: [${email}];;
+
+${sys_idnf} => nrel_academic_degree: [${academic_degree}](*<-lang_ru;;*);;
+${sys_idnf} => nrel_academic_title: [${academic_title}](*<-lang_ru;;*);;
+
+${sys_idnf} => nrel_organization: [${organization}](*<-lang_ru;;*);;
+${sys_idnf} => nrel_position: [${position}](*<-lang_ru;;*);;
+${sys_idnf} => nrel_city: [${city}](*<-lang_ru;;*);;
+${sys_idnf} => nrel_country: [${country}](*<-lang_ru;;*);;

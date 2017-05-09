@@ -59,9 +59,11 @@ public class ConfApplicationResourse {
 
         if (isEmpty(participant.getSysIndf())) {
             translationService.createTranslitSysIndf(participant);
+            scsGenerationService.generateNewParticipant(participant);
+        } else {
+            scsGenerationService.generateExistingParticipant(participant);
         }
 
-        scsGenerationService.generateParticipant(participant);
         TranslitedParticipant translitedParticipant = translationService
                 .createTranslitedParticipant(participant);
         scsGenerationService.generateApplication(participant, translitedParticipant);
